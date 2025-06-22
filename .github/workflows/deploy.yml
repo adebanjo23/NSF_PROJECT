@@ -1,0 +1,52 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to EC2
+      run: |
+        # Create deployment script
+        cat > deploy.sh << 'EOF'
+        #!/bin/bash
+        set -e
+        
+        # Go to app directory
+        cd /home/ubuntu/NSF
+        
+        # Pull latest code
+        git pull origin main
+        
+        # Stop existing containers
+        docker-compose down || true
+        
+        # Rebuild and start
+        docker-compose up -d --build
+        
+        # Clean up old images
+        docker image prune -f
+        EOF
+        
+        # Copy files to EC2
+        echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+        
+        # Copy deployment script
+        scp -i private_key.pem -o StrictHostKeyChecking=no deploy.sh ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+        
+        # Execute deployment
+        ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'ENDSSH'
+          chmod +x /home/ubuntu/deploy.sh
+          /home/ubuntu/deploy.sh
+        ENDSSH
+        
+        # Cleanup
+        rm private_key.pem
