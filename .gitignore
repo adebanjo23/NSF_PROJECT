@@ -1,9 +1,7 @@
-nsf_graphrag_knowledge/
 .env
 .files
 service-output.json
 nsf-ai-key.pem
-nsf_graphrag_knowledge
 awscliv2.zip
 aws/
 nsf
