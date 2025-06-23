@@ -6,3 +6,5 @@ nsf-ai-key.pem
 nsf_graphrag_knowledge
 awscliv2.zip
 aws/
+nsf
+__pycache__

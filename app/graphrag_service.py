@@ -17,6 +17,14 @@ Focus on identifying beneficiaries, programs, partnerships, outcomes, challenges
 funding sources, methodologies, and impact metrics. Extract information about their R.A.A.T.T. method 
 (Recruit, Assess, Accommodate, Train, Transition), AI training programs, mental health initiatives like 
 Upili, employment partnerships, and work with Persons with Disabilities, Women, and Youth in Africa.
+
+Special attention to grant-relevant information:
+- Program outcomes and success metrics
+- Partnership details and collaboration models
+- Funding history and budget utilization
+- Scalability evidence and expansion plans
+- Evidence of organizational capacity and expertise
+- Community impact and beneficiary testimonials
 """
 
 EXAMPLE_QUERIES = [
@@ -34,13 +42,20 @@ EXAMPLE_QUERIES = [
     "What partnerships exist with international organizations vs local Kenyan entities?",
     "How do concept notes evolve into implemented programs based on documentation?",
     "What mental health interventions have been most effective according to reports?",
-    "How does the foundation address intersectionality (disability + gender + youth)?"
+    "How does the foundation address intersectionality (disability + gender + youth)?",
+    # Grant-specific queries
+    "What evidence exists of NSF's organizational capacity to manage large grants?",
+    "What are NSF's demonstrated outcomes that show program effectiveness?",
+    "Which funders have previously supported NSF and what were the grant amounts?",
+    "What are NSF's core competencies and areas of expertise for grant applications?",
+    "How does NSF demonstrate sustainability and long-term impact in their programs?"
 ]
 
 ENTITY_TYPES = [
     "Person", "Organization", "Program", "Location", "Skill", "Technology",
     "Outcome", "Challenge", "Method", "Metric", "Funding", "Accommodation",
-    "Disability", "Employer", "Event"
+    "Disability", "Employer", "Event", "Grant", "Funder", "Budget", "Timeline",
+    "Stakeholder", "Beneficiary", "Impact"
 ]
 
 
@@ -68,12 +83,12 @@ class GraphRAGService:
 
         prompt = f"""Given the conversation history and current user message, return the current message as-is if it's standalone and clear. If it references previous context or is unclear without history, rephrase it to be a complete, standalone question.
 
-Conversation History:
-{history_context}
+        Conversation History:
+        {history_context}
 
-Current Message: {message}
+        Current Message: {message}
 
-Return only the standalone version of the message:"""
+        Return only the standalone version of the message:"""
 
         response = self.openai_client.chat.completions.create(
             model="gpt-4o-mini",

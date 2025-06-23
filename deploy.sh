@@ -8,7 +8,7 @@ echo "🚀 Starting AWS deployment..."
 # Variables (UPDATE THESE)
 BUCKET_NAME="nsf-ai-documents-$(date +%s)"
 DB_PASSWORD="NSFSecure123!"
-OPENAI_API_KEY="your-openai-api-key-here"  # UPDATE THIS
+OPENAI_API_KEY="your-openapi-api-key-here"  # UPDATE THIS
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 REGION="us-east-1"
 
